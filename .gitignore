@@ -1,0 +1,10 @@
+*.swp
+*.gch
+*~
+*.out
+#*
+*/tests/*
+tests/
+*#
+.#*
+test*.c
