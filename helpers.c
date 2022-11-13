@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * is_exit - checks if two strings are equal
+ * str_equals - checks if two strings are equal
  *
  * @first_string: the first string to be checked
  * @second_string: the second string to be checked
@@ -34,18 +34,22 @@ int isexit(char *str)
 }
 
 /**
- * strip_str - remove the last character in a string
+ * _lstrip - remove the last character in a string
  *
  * @str: the string to be stripped
  * Return: EXIT_SUCCESS always
  */
-char *strip_str(char *str)
+char *_lstrip(char *str)
 {
-	int i = 0;
+	size_t i = 0;
 	char *str_copy = malloc(sizeof(char) * 1024);
+	size_t length = _strlen(str);
 
 	while (str[i])
 	{
+		if (i == (length - 1))
+			break;
+
 		str_copy[i] = str[i];
 		i++;
 	}

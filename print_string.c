@@ -29,6 +29,5 @@ int _strlen(char *str)
 	while (str[i])
 		i++;
 
-	print_int(i);
 	return (i);
 }
