@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * print_int - writes a number to buffer
+ * print_int - writes a number to stdout
  *
  * @num: the number to be printed
  * Return: the number of characters printed
