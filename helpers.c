@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdio.h>
 
 /**
  * str_equals - checks if two strings are equal
@@ -55,4 +56,13 @@ char *_lstrip(char *str)
 	}
 
 	return (str_copy);
+}
+
+int env_path(int argc, char *argv[], char * envp[])
+{
+	int i;
+	for (i = 0; envp[i] != NULL; i++)
+		printf("\n%s", envp[i]);
+	getchar();
+	return 0;
 }
