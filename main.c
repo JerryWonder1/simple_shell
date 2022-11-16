@@ -63,7 +63,7 @@ int start_interactive_shell(char **command, size_t *buffsize,
 	{
 		run_command(command, argv, envp, line_no);
 		/* End the child process to prevent fork bomb */
-		_exit(EXIT_FAILURE);
+		exit(98);
 	}
 
 	/* Increment line_no since we'll be getting another command from shell */
