@@ -17,9 +17,9 @@ char *get_path_variable(void)
 	{
 		for (j = 0; sub_str[j]; j++)
 		{
-			if (sub_str[j] != *environ[j])
+			if (sub_str[j] != environ[i][j])
 				break;
-			if (j == 4)
+			if (j == (_strlen(sub_str) - 1))
 			{
 				path = environ[i];
 				break;
@@ -45,35 +45,50 @@ char *get_path_variable(void)
  */
 char **paths(void)
 {
-	int i, j, k, n;
 	char *path = get_path_variable();
-
-	char tmp[200], **path_array;
-
-	k = 0;
-	n = 0;
-
-	path_array = malloc(sizeof(char) * 4096);
-	if (path_array == NULL)
-		return (NULL);
-
-	for (i = 0; path[i]; i++)
-	{
-		str_flush(tmp); /* to clear previous values  */
-		for (j = i; path[j]; j++)
-		{
-			if (path[j] == ':')
-				break;
-			tmp[k++] = path[j];
-		}
-
-		path_array[n++] = tmp;
-		i = ++j; /* this will help skip the : character */
-	}
+	char **path_array = tokenize(path, ":");
 
 	free(path);
 
 	return (path_array);
+}
+
+/**
+ * tokenize - converts a string to an array of strings based on delimiters
+ *
+ * @str: the string to be converted
+ * @delimiters: a string that contains characters used as delimiters
+ * Return: an array of strings
+ */
+char **tokenize(char *str, char *delimiters)
+{
+	int i, j, k, n;
+
+	char tmp[200], **tokens;
+
+	k = 0;
+	n = 0;
+
+	tokens = malloc(sizeof(char) * 4096);
+	if (tokens == NULL)
+		return (NULL);
+
+	for (i = 0; str[i]; i++)
+	{
+		str_flush(tmp); /* to clear previous values  */
+		for (j = i; str[j]; j++)
+		{
+			if (in_string(delimiters, &str[j]) == EXIT_SUCCESS)
+				break;
+			tmp[k++] = str[j];
+		}
+
+		k = 0;
+		tokens[n++] = str_copy(tmp);
+		i = j; /* this will help skip the : character */
+	}
+
+	return (tokens);
 }
 
 /**
@@ -91,4 +106,19 @@ char *str_flush(char *str)
 	}
 
 	return (str);
+}
+
+/**
+ * free_tokens - frees the buffer used to store a token
+ *
+ * @buffer: buffer used to store the token
+ */
+void free_tokens(char **buffer)
+{
+	int i = 0;
+
+	while (buffer[i])
+		free(buffer[i++]);
+
+	free(buffer);
 }

@@ -31,3 +31,48 @@ int _strlen(char *str)
 
 	return (i);
 }
+
+/**
+ * str_copy - copies a string to a new buffer and returns the new buffer
+ *
+ * @str: the string to be copied
+ * Return: a buffer containing copied string
+ */
+char *str_copy(char *str)
+{
+	int i = 0;
+	char *buffer = malloc(_strlen(str) * sizeof(char));
+
+	if (buffer == NULL)
+		return (NULL);
+
+	while (str[i])
+	{
+		buffer[i] = str[i];
+		i++;
+	}
+
+	return (buffer);
+}
+
+/**
+ * in_string - checks if a character exists in a string
+ *
+ * @haystack: the main string
+ * @needle: the character to be checkedd for
+ * Return: EXIT_SUCCESS on success
+ *         else EXIT_FAILURE
+ */
+int in_string(char *haystack, char *needle)
+{
+	int i = 0;
+
+	while (haystack[i])
+	{
+		if (haystack[i] == *needle)
+			return (EXIT_SUCCESS);
+		i++;
+	}
+
+	return (EXIT_FAILURE);
+}

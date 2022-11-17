@@ -27,5 +27,12 @@ char *get_path_variable(void);
 char **paths(void);
 char *str_flush(char *str);
 int env_path(void);
+char *str_copy(char *str);
+
+char *command_exists(char *command);
+char *append_path(char *path, char *command);
+void free_tokens(char **buffer);
+char **tokenize(char *str, char *delimiters);
+int in_string(char *haystack, char *needle);
 
 #endif
