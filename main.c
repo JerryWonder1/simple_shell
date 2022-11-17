@@ -69,7 +69,7 @@ int start_interactive_shell(char **command, size_t *buffsize,
 			{
 				run_command(commands, argv, envp, line_no);
 				/* End the child process to prevent fork bomb */
-				exit(EXIT_FAILURE);
+				exit(98);
 			}
 		}
 		else
@@ -102,14 +102,17 @@ int start_shell(char **command, size_t *buffsize, char *argv[],
 	if (*command[0] != -1 || *command[0] != EOF)
 	{
 		if (str_equals(command[0], "env\n") == EXIT_SUCCESS)
+		{
 			env_path(envp);
+			return (EXIT_SUCCESS);
+		}
 		else if (commands != NULL)
 			run_command(commands, argv, envp, line_no);
 		else
 			_perror(command[0], argv[0], line_no);
 	}
 
-	return (EXIT_SUCCESS);
+	return (98);
 }
 
 /**
