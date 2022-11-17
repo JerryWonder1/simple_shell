@@ -59,18 +59,20 @@ char *_lstrip(char *str)
 }
 
 /**
- * env_path - show environment 
+ * env_path - show environment variables
  *
- * @argc: 
- * @argv: 
- * @envp: 
+ * Return: EXIT_SUCCESS
  */
-
-int env_path(int argc, char *argv[], char * envp[])
+int env_path(void)
 {
+	extern char **environ;
 	int i;
-	for (i = 0; envp[i] != NULL; i++)
-		printf("\n%s", envp[i]);
-	getchar();
-	return 0;
+
+	for (i = 0; environ[i]; i++)
+	{
+		print_string(environ[i]);
+		_putchar('\n');
+	}
+
+	return (EXIT_SUCCESS);
 }

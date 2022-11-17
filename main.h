@@ -24,7 +24,8 @@ int print_int(long int num);
 int _strlen(char *str);
 char *_lstrip(char *str);
 char *get_path_variable(void);
-char *paths(void);
+char **paths(void);
 char *str_flush(char *str);
+int env_path(void);
 
 #endif

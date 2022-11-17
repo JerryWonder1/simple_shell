@@ -52,18 +52,23 @@ int start_interactive_shell(char **command, size_t *buffsize,
 	if (isexit(command[0]) == EXIT_SUCCESS || **command == -1 ||
 	    **command == EOF)
 		return (0);
-
-	pid = fork(); /* Fork the process and store it's id */
-
-	if (pid == -1)
-		print_string("Failed to fork\n");
-	else if (pid > 0)
-		waitpid(pid, &status, 0);
+	if (str_equals(command[0], "env\n") == EXIT_SUCCESS)
+		env_path();
 	else
 	{
-		run_command(command, argv, envp, line_no);
-		/* End the child process to prevent fork bomb */
-		exit(98);
+
+		pid = fork(); /* Fork the process and store it's id */
+
+		if (pid == -1)
+			print_string("Failed to fork\n");
+		else if (pid > 0)
+			waitpid(pid, &status, 0);
+		else
+		{
+			run_command(command, argv, envp, line_no);
+			/* End the child process to prevent fork bomb */
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	/* Increment line_no since we'll be getting another command from shell */
@@ -91,7 +96,12 @@ int start_shell(char **command, size_t *buffsize, char *argv[],
 	getline(command, buffsize, stdin);
 
 	if (*command[0] != -1 || *command[0] != EOF)
-		run_command(command, argv, envp, line_no);
+	{
+		if (str_equals(command[0], "env\n") == EXIT_SUCCESS)
+			env_path();
+		else
+			run_command(command, argv, envp, line_no);
+	}
 
 	return (EXIT_SUCCESS);
 }
