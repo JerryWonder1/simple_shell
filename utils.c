@@ -4,14 +4,14 @@
  * get_path_variable - gets the value of the path variable from the environment
  *                     variables excluding 'PATH=' from the string
  *
+ * @environ: array of strings of environment variables
  * Return: the value of the path environment variable
  */
-char *get_path_variable(void)
+char *get_path_variable(char *environ[])
 {
 	char *path, *path_copy;
 	int i, j;
 	char *sub_str = "PATH=";
-	extern char **environ;
 
 	for (i = 0; environ[i]; i++)
 	{
@@ -41,11 +41,12 @@ char *get_path_variable(void)
 /**
  * paths - returns an array of directories in PATH
  *
+ * @environ: array of strings of environment variables
  * Return: an array of directories in path
  */
-char **paths(void)
+char **paths(char *environ[])
 {
-	char *path = get_path_variable();
+	char *path = get_path_variable(environ);
 	char **path_array = tokenize(path, ":");
 
 	free(path);

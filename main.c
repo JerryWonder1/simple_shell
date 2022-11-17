@@ -45,25 +45,20 @@ int start_interactive_shell(char **command, size_t *buffsize,
 {
 	pid_t pid; /* To hold the process if of the child process */
 	int status; /* Just to hold the status of the child process */
-	char *full_path_to_command, **commands;
+	char **commands;
 
 	print_string("-> "); /* This is simply the prompt */
-	getline(command, buffsize, stdin);
-	command[0] = _lstrip(command[0]);
-	commands = tokenize(command[0], " :\r\n\t");
 
-	full_path_to_command = command_exists(commands[0]);
-	commands[0] = full_path_to_command == NULL
-		? commands[0] : full_path_to_command;
+	commands = get_command(command, buffsize, envp);
 
 	if (_strlen(command[0]) > 0)
 	{
 		if (isexit(command[0]) == EXIT_SUCCESS ||
-		    **commands == -1 || **commands == EOF)
+		    *command[0] == -1 || *command[0] == EOF)
 			return (0);
-		if (str_equals(commands[0], "env\n") == EXIT_SUCCESS)
-			env_path();
-		else if (full_path_to_command != NULL)
+		if (str_equals(command[0], "env\n") == EXIT_SUCCESS)
+			env_path(envp);
+		else if (commands != NULL)
 		{
 			pid = fork(); /* Fork the process and store it's id */
 			if (pid == -1)
@@ -77,6 +72,8 @@ int start_interactive_shell(char **command, size_t *buffsize,
 				exit(EXIT_FAILURE);
 			}
 		}
+		else
+			_perror(command[0], argv[0], line_no);
 	}
 	/* Increment line_no since we'll get another command from shell */
 	line_no += 1;
@@ -98,24 +95,18 @@ int start_interactive_shell(char **command, size_t *buffsize,
 int start_shell(char **command, size_t *buffsize, char *argv[],
 		char *envp[], int line_no)
 {
-	char *full_path_to_command, **commands;
+	char **commands;
 
-	getline(command, buffsize, stdin);
-	command[0] = _lstrip(command[0]);
+	commands = get_command(command, buffsize, envp);
 
-	commands = tokenize(command[0], " :\r\n\t");
-
-	full_path_to_command = command_exists(commands[0]);
-	commands[0] = full_path_to_command == NULL
-		? commands[0] : full_path_to_command;
-
-
-	if (*commands[0] != -1 || *commands[0] != EOF)
+	if (*command[0] != -1 || *command[0] != EOF)
 	{
-		if (str_equals(commands[0], "env\n") == EXIT_SUCCESS)
-			env_path();
-		else if (full_path_to_command != NULL)
+		if (str_equals(command[0], "env\n") == EXIT_SUCCESS)
+			env_path(envp);
+		else if (commands != NULL)
 			run_command(commands, argv, envp, line_no);
+		else
+			_perror(command[0], argv[0], line_no);
 	}
 
 	return (EXIT_SUCCESS);

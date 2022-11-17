@@ -61,16 +61,16 @@ char *_lstrip(char *str)
 /**
  * env_path - show environment variables
  *
+ * @envp: array of strings containing environment variables
  * Return: EXIT_SUCCESS
  */
-int env_path(void)
+int env_path(char *envp[])
 {
-	extern char **environ;
 	int i;
 
-	for (i = 0; environ[i]; i++)
+	for (i = 0; envp[i]; i++)
 	{
-		print_string(environ[i]);
+		print_string(envp[i]);
 		_putchar('\n');
 	}
 

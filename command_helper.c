@@ -4,11 +4,11 @@
  * command_exists - searches for PATH dir containing command
  *
  * @command: the command to be searched for
- *
+ * @environ: array of strings of environment variables
  * Return: unsigned int character count
  */
 
-char *command_exists(char *command)
+char *command_exists(char *command, char *environ[])
 {
 	int i = 0;
 	char *ret;
@@ -23,7 +23,7 @@ char *command_exists(char *command)
 	}
 	else
 	{
-		path_array = paths();
+		path_array = paths(environ);
 
 		while (path_array[i])
 		{
@@ -81,4 +81,32 @@ char *append_path(char *path, char *command)
 	buffer[a + b] = '\0';
 
 	return (buffer);
+}
+
+/**
+ * get_command - get command from user and checks if it exists
+ *
+ * @command: buffer to store the command
+ * @buffsize: the size of the buffer
+ * @environ: array of strings of environment variables
+ * Return: the command and it's arguments in an array if successful
+ *         else NULL
+ */
+char **get_command(char **command, size_t *buffsize, char *environ[])
+{
+	char *full_path_to_command, **commands;
+
+	getline(command, buffsize, stdin);
+	command[0] = _lstrip(command[0]);
+
+	commands = tokenize(command[0], " :\r\n\t");
+
+	full_path_to_command = command_exists(commands[0], environ);
+
+	if (full_path_to_command == NULL)
+		return (NULL);
+
+	commands[0] = full_path_to_command;
+
+	return (commands);
 }

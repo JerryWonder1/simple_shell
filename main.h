@@ -23,16 +23,17 @@ void _perror(char *command, char *shell, int line_no);
 int print_int(long int num);
 int _strlen(char *str);
 char *_lstrip(char *str);
-char *get_path_variable(void);
-char **paths(void);
+char *get_path_variable(char *environ[]);
+char **paths(char *environ[]);
 char *str_flush(char *str);
-int env_path(void);
+int env_path(char *envp[]);
 char *str_copy(char *str);
 
-char *command_exists(char *command);
+char *command_exists(char *command, char *environ[]);
 char *append_path(char *path, char *command);
 void free_tokens(char **buffer);
 char **tokenize(char *str, char *delimiters);
 int in_string(char *haystack, char *needle);
+char **get_command(char **command, size_t *buffsize, char *envp[]);
 
 #endif
